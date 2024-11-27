@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue System Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        #status { margin: 20px; }
+        #msg { margin: 20px; }
+        button { padding: 10px 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<h1>Queue System Test</h1>
+
+<div id="status">Status: Not Connected</div>
+<div id="msg">Wait...</div>
+
+<button onclick="connect()">Enter Queue</button>
+<button onclick="disconnect()">Leave Queue</button>
+
+<script>
+    let socket = null;
+    let stompClient = null;
+    let key = 'User' + Math.floor(Math.random() * 1000); // 임의의 key 생성
+    let topic = `/topic/${key}`;
+
+    function connect() {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            socket = new SockJS("/connect");
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                // display status
+                displayStatus('Status: Connected as ' + key)
+                // display message
+                displayMsg("Wait...");
+
+                stompClient.subscribe(topic, function (data) {
+                    // display message
+                    displayMsg(data.body);
+                });
+            }, {key : key});
+        }
+    }
+
+    function disconnect() {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            // disconnect
+            stompClient.disconnect();
+
+            // display status
+            displayStatus("Disconnected from the queue");
+            // display message
+            displayMsg("Wait...");
+        }
+    }
+
+    function displayStatus(status) {
+        document.getElementById("status").innerText = status;
+    }
+
+    function displayMsg(msg) {
+        document.getElementById("msg").innerText = msg;
+    }
+
+    // 사용자가 닫을 때 발생하는 이벤트 핸들링
+    window.addEventListener('beforeunload', disconnect);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</body>
+</html>
