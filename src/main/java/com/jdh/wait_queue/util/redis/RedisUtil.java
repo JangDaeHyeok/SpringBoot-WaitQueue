@@ -47,7 +47,7 @@ public class RedisUtil {
     }
 
     /**
-     * Get Sorted Set
+     * Get Value With Key
      */
     public String getValue(String key){
         return redisTemplate.opsForValue().get(key);
