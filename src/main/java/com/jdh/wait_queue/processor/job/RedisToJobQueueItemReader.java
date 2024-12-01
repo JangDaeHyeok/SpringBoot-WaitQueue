@@ -33,11 +33,11 @@ public class RedisToJobQueueItemReader implements ItemReader<String> {
         }
 
         // 대기열의 다음 사용자 조회
-        var result = String.valueOf(redisUtil.getNext(waitQueueKey));
+        String result = String.valueOf(redisUtil.getNext(waitQueueKey));
 
         log.info("[RedisToJobQueueItemReader] 작업열로 넘어갈 사용자 :: {}", result);
 
-        return "MonoDefaultIfEmpty".equals(result) || result.isEmpty() ? null : result; // 가장 오래된 사용자 반환
+        return "null".equals(result) || result.isEmpty() ? null : result; // 가장 오래된 사용자 반환
     }
 
     /**
