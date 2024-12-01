@@ -52,11 +52,11 @@ public class RedisToJobQueueProcessor implements ItemProcessor<String, String> {
      */
     private Boolean checkKeyExistsWaitQueue(String key) {
         // 대기열에서 key의 rank 조회
-        long rank = redisUtil.getzRank(waitQueueKey, key);
+        Long rank = redisUtil.getzRank(waitQueueKey, key);
 
         log.info("[RedisToJobQueueProcessor] {} 사용자 rank :: {}", key, rank);
 
-        return rank >= 0;
+        return rank != null && rank >= 0;
     }
 
 }
