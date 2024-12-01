@@ -25,29 +25,17 @@ public class BatchController {
     @Qualifier("rankWaitQueueJob")
     private final Job rankWaitQueue;
 
-    @GetMapping("/run-batch-to-job")
-    public String runBatchMoveUsersToJob() {
+    @GetMapping("/run-batch")
+    public String runBatch() {
         try {
             JobParameters jobParameters = new JobParametersBuilder()
-                    .addString("moveUsersToJobQueueRunId", UUID.randomUUID().toString()) // 유일한 파라미터 추가
+                    .addString("runBatchId", UUID.randomUUID().toString()) // 유일한 파라미터 추가
                     .toJobParameters();
 
+            // 대기열에서 작업열 이동 Job 실행
             jobLauncher.run(moveUsersToJobQueue, jobParameters);
 
-            return "Batch job executed successfully!";
-        } catch (Exception e) {
-            log.error("[BatchController] :: ", e);
-            return "Failed to execute batch job.";
-        }
-    }
-
-    @GetMapping("/run-batch-rank-wait")
-    public String runBatchRankWaitQueue() {
-        try {
-            JobParameters jobParameters = new JobParametersBuilder()
-                    .addString("rankWaitQueueRunId", UUID.randomUUID().toString()) // 유일한 파라미터 추가
-                    .toJobParameters();
-
+            // 현재 대기열 순번 Send Job 실행
             jobLauncher.run(rankWaitQueue, jobParameters);
 
             return "Batch job executed successfully!";
