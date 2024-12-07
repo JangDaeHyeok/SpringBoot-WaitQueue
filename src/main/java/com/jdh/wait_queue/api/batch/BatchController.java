@@ -8,12 +8,12 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Slf4j
-@RestController
+@Component
 @RequiredArgsConstructor
 public class BatchController {
 
@@ -25,8 +25,7 @@ public class BatchController {
     @Qualifier("rankWaitQueueJob")
     private final Job rankWaitQueue;
 
-    // @GetMapping("/run-batch")
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 5000)
     public void runBatch() {
         try {
             JobParameters jobParameters = new JobParametersBuilder()
