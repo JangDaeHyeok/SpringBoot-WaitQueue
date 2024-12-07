@@ -52,7 +52,7 @@ public class RankWaitQueueItemReader implements ItemReader<String> {
     }
 
     /**
-     * initialize dataFlux, iterator
+     * initialize set, iterator
      */
     private void initData() {
         dataSet = null;
