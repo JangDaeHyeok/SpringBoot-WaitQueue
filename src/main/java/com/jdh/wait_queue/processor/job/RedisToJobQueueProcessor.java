@@ -8,7 +8,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
@@ -42,7 +41,7 @@ public class RedisToJobQueueProcessor implements ItemProcessor<String, String> {
         redisUtil.addZSet(jobQueueKey, key);
 
         // 작업열로 이동한 사용자에게 STOMP를 통해 알림 전송
-        messagingTemplate.convertAndSend("/topic/" + key, "Now Asctive!");
+        messagingTemplate.convertAndSend("/topic/" + key, "active");
 
         return key;
     }

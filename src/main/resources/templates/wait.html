@@ -15,7 +15,7 @@
 
 <h1>Queue System Test</h1>
 
-<div id="status">Status: Not Connected</div>
+<div id="status"></div>
 <div id="msg">Wait...</div>
 
 <button onclick="connect()">Enter Queue</button>
@@ -32,14 +32,15 @@
             socket = new SockJS("/connect");
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
-                // display status
-                displayStatus('Status: Connected as ' + key)
-                // display message
+                displayStatus(key + '님, 사용자가 많아 접속 대기중이에요')
                 displayMsg("Wait...");
 
                 stompClient.subscribe(topic, function (data) {
-                    // display message
                     displayMsg(data.body);
+
+                    if(data.body === 'active') {
+                        displayStatus(key + '님, 접속되었습니다')
+                    }
                 });
             }, {key : key});
         }

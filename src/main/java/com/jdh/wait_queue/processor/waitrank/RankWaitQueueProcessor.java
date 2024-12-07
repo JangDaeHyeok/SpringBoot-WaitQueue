@@ -32,7 +32,7 @@ public class RankWaitQueueProcessor implements ItemProcessor<String, String> {
 
         // 현재 대기 순서 전달
         if(rank != null)
-            messagingTemplate.convertAndSend("/topic/" + key, "Your wait rank is " + (rank + 1));
+            messagingTemplate.convertAndSend("/topic/" + key, "대기순번 " + (rank + 1));
 
         return key;
     }
